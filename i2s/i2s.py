@@ -43,7 +43,7 @@ class I2S_Receiver(wiring.Component):
         with m.Elif(sclk_edge):
             m.d.sync += count.eq(count + 1)
             m.d.sync += data.eq(Cat(self.sd_rx, data))
-            m.d.sync += done.eq(count == 7)
+            m.d.sync += done.eq(count == self.sample_width - 1)
 
         # Push assembled payloads into the pipeline:
         with m.If(done & (~self.r_data_rx.valid | self.r_data_rx.ready)):
@@ -57,13 +57,13 @@ class I2S_Receiver(wiring.Component):
         return m
 
 def test_i2s_receiver():
-    dut = I2S_Receiver(sample_width=8)
+    dut = I2S_Receiver(sample_width=16)
 
     async def testbench_input(ctx):
         await ctx.tick()
         ctx.set(dut.ws, 1)
         await ctx.tick()
-        for bit in [1, 0, 1, 0, 0, 1, 1, 1]:
+        for bit in [1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1]:
             ctx.set(dut.sd_rx, bit)
             ctx.set(dut.sclk, 0)
             await ctx.tick()
@@ -71,7 +71,7 @@ def test_i2s_receiver():
             await ctx.tick()
         ctx.set(dut.ws, 0)
         await ctx.tick()
-        for bit in [1, 0, 1, 0, 0, 1, 1, 1]:
+        for bit in [1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1]:
             ctx.set(dut.sd_rx, bit)
             ctx.set(dut.sclk, 0)
             await ctx.tick()
@@ -80,7 +80,7 @@ def test_i2s_receiver():
         ctx.set(dut.ws, 1)
 
     async def testbench_output(ctx):
-        expected_word = 0b10100111
+        expected_word = 0b1010011110100111
         payload = await stream_get(ctx, dut.r_data_rx)
         assert (payload & 0xff) == (expected_word & 0xff), \
             f"{payload & 0xff:08b} != {expected_word & 0xff:08b} (expected)"
