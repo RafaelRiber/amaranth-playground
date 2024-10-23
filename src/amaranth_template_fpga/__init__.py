@@ -1,6 +1,6 @@
 from amaranth import *
 
-from amaranth_boards.icestick import ICEStickPlatform
+from amaranth_boards.icebreaker import ICEBreakerPlatform
 from amaranth_boards.versa_ecp5 import VersaECP5Platform
 from amaranth_boards.tang_nano import TangNanoPlatform
 
@@ -18,7 +18,7 @@ class Toplevel(Elaboratable):
 
 
 def build_ice40():
-    ICEStickPlatform().build(Toplevel())
+    ICEBreakerPlatform().build(Toplevel())
 
 
 def build_ecp5():
