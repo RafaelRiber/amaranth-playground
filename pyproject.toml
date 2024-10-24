@@ -21,6 +21,7 @@ test = [
 [tool.pdm.scripts]
 _.env_file = ".env.toolchain"
 test = { cmd = "pytest" }
-build_ice40 = { call = "amaranth_template_fpga:build_ice40()" }
-build_ecp5  = { call = "amaranth_template_fpga:build_ecp5()"  }
-build_gowin = { call = "amaranth_template_fpga:build_gowin()" }
+build_ice40 =   { call = "amaranth_template_fpga:build_ice40()"   }
+build_ecp5  =   { call = "amaranth_template_fpga:build_ecp5()"    }
+build_gowin =   { call = "amaranth_template_fpga:build_gowin()"   }
+build_arty100 = { call = "amaranth_template_fpga:build_arty100()" }
