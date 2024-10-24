@@ -1,6 +1,6 @@
 # amaranth-template-fpga
 
-TODO: write this section
+Personal tests on the amaranth template for the [Amaranth HDL language](https://github.com/amaranth-lang/amaranth)
 
 ```shell
 $ pipx install pdm
